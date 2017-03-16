@@ -9,6 +9,30 @@ import javax.swing.JFrame;
 
 public class MyMouseAdapter extends MouseAdapter {
 	private Random generator = new Random();
+	public Color randomColorGenerator(){
+		Color newColor=null;
+
+		switch (generator.nextInt(5)) {
+		case 0:
+			newColor = Color.YELLOW;
+			break;
+		case 1:
+			newColor = Color.MAGENTA;
+			break;
+		case 2:
+			newColor = Color.BLACK;
+			break;
+		case 3:
+			newColor = new Color(0x964B00);   //Brown (from http://simple.wikipedia.org/wiki/List_of_colors)
+			break;
+		case 4:
+			newColor = new Color(0xB57EDC);   //Lavender (from http://simple.wikipedia.org/wiki/List_of_colors)
+			break;
+		}
+		return newColor;
+	}
+
+
 	public void mousePressed(MouseEvent e) {
 		switch (e.getButton()) {
 		case 1:		//Left mouse button
@@ -41,6 +65,7 @@ public class MyMouseAdapter extends MouseAdapter {
 			break;
 		}
 	}
+
 	public void mouseReleased(MouseEvent e) {
 		switch (e.getButton()) {
 		case 1:		//Left mouse button
@@ -77,37 +102,40 @@ public class MyMouseAdapter extends MouseAdapter {
 					} else {
 						//Released the mouse button on the same cell where it was pressed
 						if ((gridX == 0) || (gridY == 0)) {
-							//On the left column and on the top row... do nothing
+							Color newColor = null;
+							do{
+								newColor=randomColorGenerator();
+							}
+							while(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY].equals(newColor));
+								if (gridY != 0) {
+									for (int i=1; i < 10; i++){
+										myPanel.colorArray[myPanel.mouseDownGridX+i][myPanel.mouseDownGridY] = randomColorGenerator();
+									}
+								}
+								else if (gridX != 0) {
+									for (int i=1; i < 10; i++){
+										myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY+i] = randomColorGenerator();
+									}
+								}
+								else {
+									for (int i=1; i < 10; i++){
+										myPanel.colorArray[myPanel.mouseDownGridX+i][myPanel.mouseDownGridY+i] = randomColorGenerator();
+									}
+								}
 						} else {
 							//On the grid other than on the left column and on the top row:
 							Color newColor = null;
 							do{
-								switch (generator.nextInt(5)) {
-								case 0:
-									newColor = Color.YELLOW;
-									break;
-								case 1:
-									newColor = Color.MAGENTA;
-									break;
-								case 2:
-									newColor = Color.BLACK;
-									break;
-								case 3:
-									newColor = new Color(0x964B00);   //Brown (from http://simple.wikipedia.org/wiki/List_of_colors)
-									break;
-								case 4:
-									newColor = new Color(0xB57EDC);   //Lavender (from http://simple.wikipedia.org/wiki/List_of_colors)
-									break;
-								}
+								newColor=randomColorGenerator();
 							}
-							while(newColor.equals(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY]));
+							while(myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY].equals(newColor));
 							myPanel.colorArray[myPanel.mouseDownGridX][myPanel.mouseDownGridY] = newColor;
 							myPanel.repaint();
+						}
 					}
 				}
-			}
-			myPanel.repaint();
-			break;
+				myPanel.repaint();
+				break;
 			}
 		case 3:		//Right mouse button
 			//Do nothing
