@@ -102,6 +102,13 @@ public class MyMouseAdapter extends MouseAdapter {
 					} else {
 						//Released the mouse button on the same cell where it was pressed
 						if ((gridX == 0) || (gridY == 0)) {
+							if(gridX==0 && gridY==10){
+								for(int i=4;i<7;i++){
+									for(int j=4;j<7;j++){
+										myPanel.colorArray[i][j]=randomColorGenerator();
+									}
+								}
+							}
 							Color newColor = null;
 							do{
 								newColor=randomColorGenerator();
